@@ -1,3 +1,4 @@
-env
-checkpoints
+env/
+checkpoints/
 .ideaenv/
+__pycache__/

@@ -1,13 +1,13 @@
 import random
 import requests
+from config import RẠNDOMUSER_URL
 
-BASE_URL = 'https://randomuser.me/api/?nat=gb'
 PARTIES = ["Management Party", "Savior Party", "Tech Republic Party"]
 random.seed(42)
 
 
 def generate_voter_data():
-    response = requests.get(BASE_URL)
+    response = requests.get(RẠNDOMUSER_URL)
     if response.status_code == 200:
         user_data = response.json()['results'][0]
         return {
@@ -35,7 +35,7 @@ def generate_voter_data():
 
 
 def generate_candidate_data(candidate_number, total_parties):
-    response = requests.get(BASE_URL + '&gender=' + ('female' if candidate_number % 2 == 1 else 'male'))
+    response = requests.get(RẠNDOMUSER_URL + '&gender=' + ('female' if candidate_number % 2 == 1 else 'male'))
     if response.status_code == 200:
         user_data = response.json()['results'][0]
 

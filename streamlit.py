@@ -20,7 +20,7 @@ def create_kafka_consumer(topic_name):
 
 # Function to fetch voting statistics from PostgreSQL database
 @st.cache_data
-def fetch_voting_stats():
+def fetch_voting_stats(): # fix 
     # Connect to PostgreSQL database
     conn = psycopg2.connect("host=localhost dbname=voting user=postgres password=postgres")
     cur = conn.cursor()
@@ -40,7 +40,7 @@ def fetch_voting_stats():
     return voters_count, candidates_count
 
 # Function to fetch data from Kafka
-def fetch_data_from_kafka(consumer):
+def fetch_data_from_kafka(consumer): # fix 
     # Poll Kafka consumer for messages within a timeout period
     messages = consumer.poll(timeout_ms=1000)
     data = []

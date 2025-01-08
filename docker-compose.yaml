@@ -58,6 +58,17 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    volumes:
+      - "./data-postgres:/var/lib/postgresql/data:rw"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-container
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "6868:80"
 
   spark-master:
    image: bitnami/spark:latest
@@ -76,3 +87,6 @@ services:
      SPARK_WORKER_CORES: 2
      SPARK_WORKER_MEMORY: 1g
      SPARK_MASTER_URL: spark://spark-master:7077
+
+volumes:
+  data-postgres:

@@ -1,17 +1,15 @@
-from create_tables import create_tables, insert_voters
-from generate_data import generate_candidate_data, generate_voter_data
+from data_src.create_tables import insert_voters, insert_candidates
+from data_src.generate_data import generate_candidate_data, generate_voter_data
 import psycopg2
 from confluent_kafka import SerializingProducer
 import simplejson as json
+from data_src.connect_postgres import connect, cursor, get_candidates
+from config import KAFKA_CONFIG, kafka_producer_config
 
 
-BASE_URL = 'https://randomuser.me/api/?nat=gb'
-PARTIES = ["Management Party", "Savior Party", "Tech Republic Party"]
+candidates = get_candidates()
 
 # Kafka Topics
-voters_topic = 'voters_topic'
-candidates_topic = 'candidates_topic'
-
 def delivery_report(err, msg):
     if err is not None:
         print(f'Message delivery failed: {err}')
@@ -20,40 +18,34 @@ def delivery_report(err, msg):
 
 
 if __name__ == "__main__":
-    producer = SerializingProducer({'bootstrap.servers': 'localhost:9092', })
-
-
-    conn = psycopg2.connect("host=localhost dbname=voting user=postgres password=postgres")
-    cur = conn.cursor()  
-    create_tables(conn, cur)
-    cur.execute("""
-        SELECT * FROM candidates
-    """)
-    candidates = cur.fetchall()
-    print(candidates)
+    producer = SerializingProducer(kafka_producer_config)
 
     if len(candidates) == 0:
-        for i in range(3):
-            candidate = generate_candidate_data(i, 3)
-            print(candidate)
-            cur.execute("""
-                        INSERT INTO candidates (candidate_id, candidate_name, party_affiliation, biography, campaign_platform, photo_url)
-                        VALUES (%s, %s, %s, %s, %s, %s)
-                    """, (
-                candidate['candidate_id'], candidate['candidate_name'], candidate['party_affiliation'], candidate['biography'],
-                candidate['campaign_platform'], candidate['photo_url']))
-            conn.commit()
+        for i in range(3): # 3 is number of candidate
+            candidate = generate_candidate_data(i, 3) # 3 is number of candidate
+            insert_candidates(connect, cursor, candidate)
 
-    for i in range(1000):
+    for i in range(1000): # 1000 is number of voters 
         voter_data = generate_voter_data()
-        insert_voters(conn, cur, voter_data)
+        insert_voters(connect, cursor, voter_data)
         
         producer.produce(
-            voters_topic,
+            KAFKA_CONFIG["topic_voters"],# voters_topic
             key=voter_data["voter_id"],
-            value=json.dumps(voter_data),
+            value=json.dumps(voter_data),   
             on_delivery=delivery_report
         )
 
         print('Produced voter {}, data: {}'.format(i, voter_data))
         producer.flush()
+
+
+# create table in postgres
+# create topic 
+# data insert flow 
+# note lại cách chạy -> tìm phương pháp tự động hoá khác 
+# deploy src code on docker-compsoe 
+# github action 
+# tự động create user theo thời gian thực ví dụ mỗi 10s có 7-10 voters ! 
+# format code !! 
+        

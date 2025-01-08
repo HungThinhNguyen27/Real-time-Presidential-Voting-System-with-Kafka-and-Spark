@@ -3,3 +3,4 @@ checkpoints
 .ideaenv
 __pycache__
 postgresql-42.7.1.jar
+data-postgres

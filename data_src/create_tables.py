@@ -56,3 +56,20 @@ def insert_voters(conn, cur, voter):
                  voter['cell_number'], voter['picture'], voter['registered_age'])
                 )
     conn.commit()
+
+def insert_candidates(conn, cur, candidate):
+    c.execute("""
+                INSERT INTO candidates (candidate_id, candidate_name, party_affiliation, biography, campaign_platform, photo_url)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (
+        candidate['candidate_id'], candidate['candidate_name'], candidate['party_affiliation'], candidate['biography'],
+        candidate['campaign_platform'], candidate['photo_url']))
+    conn.commit()
+
+def insert_votes(conn, cur, vote):
+    cur.execute("""
+            INSERT INTO votes (voter_id, candidate_id, voting_time)
+            VALUES (%s, %s, %s)
+        """, (vote['voter_id'], vote['candidate_id'], vote['voting_time']))
+
+    conn.commit()

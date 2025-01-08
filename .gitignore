@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 env/
 checkpoints/
 .ideaenv/
 __pycache__/
 postgresql-42.7.1.jar
-=======
-venv
-checkpoints
-.idea
->>>>>>> 69ec92c1
+

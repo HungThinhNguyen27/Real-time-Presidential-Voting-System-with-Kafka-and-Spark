@@ -10,7 +10,7 @@ POSTGRES_CONFIG = {
     "password": "postgres"
 }
 
-# KAFKA CONFIF
+# KAFKA CONFIG
 
 KAFKA_CONFIG = {
     "topic_voters": "topic_voters",

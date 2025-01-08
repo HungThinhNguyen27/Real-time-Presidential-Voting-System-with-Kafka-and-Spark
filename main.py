@@ -1,4 +1,4 @@
-from data_src.create_tables import insert_voters, insert_candidates
+from data_src.create_tables import insert_voters, insert_candidates, create_tables
 from data_src.generate_data import generate_candidate_data, generate_voter_data
 import psycopg2
 from confluent_kafka import SerializingProducer
@@ -7,7 +7,6 @@ from data_src.connect_postgres import connect, cursor, get_candidates
 from config import KAFKA_CONFIG, kafka_producer_config
 
 
-candidates = get_candidates()
 
 # Kafka Topics
 def delivery_report(err, msg):
@@ -19,10 +18,13 @@ def delivery_report(err, msg):
 
 if __name__ == "__main__":
     producer = SerializingProducer(kafka_producer_config)
-
+    # create_tables(connect, cursor)
+    candidates = get_candidates()
+    print(len(candidates))
     if len(candidates) == 0:
         for i in range(3): # 3 is number of candidate
             candidate = generate_candidate_data(i, 3) # 3 is number of candidate
+            print(candidate)
             insert_candidates(connect, cursor, candidate)
 
     for i in range(1000): # 1000 is number of voters 

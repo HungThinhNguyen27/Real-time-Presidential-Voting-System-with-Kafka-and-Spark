@@ -1,13 +1,17 @@
 import random
 import requests
-from config import RẠNDOMUSER_URL
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# from config import RẠNDOMUSER_URL
 
+BASE_URL = 'https://randomuser.me/api/?nat=gb'
 PARTIES = ["Management Party", "Savior Party", "Tech Republic Party"]
 random.seed(42)
 
 
 def generate_voter_data():
-    response = requests.get(RẠNDOMUSER_URL)
+    response = requests.get(BASE_URL)
     if response.status_code == 200:
         user_data = response.json()['results'][0]
         return {
@@ -35,7 +39,9 @@ def generate_voter_data():
 
 
 def generate_candidate_data(candidate_number, total_parties):
-    response = requests.get(RẠNDOMUSER_URL + '&gender=' + ('female' if candidate_number % 2 == 1 else 'male'))
+    print("candidate_number", candidate_number, "total_parties", total_parties)
+    response = requests.get(BASE_URL + '&gender=' + ('female' if candidate_number % 2 == 1 else 'male'))
+    print(response)
     if response.status_code == 200:
         user_data = response.json()['results'][0]
 
@@ -50,3 +56,7 @@ def generate_candidate_data(candidate_number, total_parties):
         }
     else:
         return "Error fetching data"
+    
+for i in range(1, 4):
+    candidate = generate_candidate_data(i, 4)
+    print(candidate)

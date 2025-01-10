@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  realtime_dashboard_services:
+    build: .
+    container_name: realtime_dashboard_services
+    ports:
+      - 6869:8501  # Ensure the app runs on port 8501 inside the container
+    volumes:
+      - .:/app  
+    restart: unless-stopped  
+    networks:
+      - voting-platform-nw
+    
+networks:
+  voting-platform-nw:
+    external: true
+

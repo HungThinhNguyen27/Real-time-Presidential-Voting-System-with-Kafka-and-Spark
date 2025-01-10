@@ -1,9 +1,11 @@
+import sys
+import os
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col
 from pyspark.sql.functions import sum as _sum
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType
-from config import KAFKA_CONFIG
-# import pyspark
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from config import RẠNDOMUSER_URL, KAFKA_CONFIG
 
 # print(pyspark.__version__) # to check the version of pyspark
 

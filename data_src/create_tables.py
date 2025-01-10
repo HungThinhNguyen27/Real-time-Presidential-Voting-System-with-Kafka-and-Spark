@@ -11,11 +11,13 @@ def create_tables(conn, cur):
             photo_url TEXT
         )
     """)
+    
     cur.execute("""
         CREATE TABLE IF NOT EXISTS voters (
             voter_id VARCHAR(255) PRIMARY KEY,
             voter_name VARCHAR(255),
             date_of_birth VARCHAR(255),
+            age INTEGER,
             gender VARCHAR(255),
             nationality VARCHAR(255),
             registration_number VARCHAR(255),
@@ -46,10 +48,10 @@ def create_tables(conn, cur):
 
 def insert_voters(conn, cur, voter):
     cur.execute("""
-                        INSERT INTO voters (voter_id, voter_name, date_of_birth, gender, nationality, registration_number, address_street, address_city, address_state, address_country, address_postcode, email, phone_number, cell_number, picture, registered_age)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s)
+                INSERT INTO voters (voter_id, voter_name, date_of_birth, age, gender, nationality, registration_number, address_street, address_city, address_state, address_country, address_postcode, email, phone_number, cell_number, picture, registered_age)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s)
                         """,
-                (voter["voter_id"], voter['voter_name'], voter['date_of_birth'], voter['gender'],
+                (voter["voter_id"], voter['voter_name'], voter['date_of_birth'],voter['age'], voter['gender'],
                  voter['nationality'], voter['registration_number'], voter['address']['street'],
                  voter['address']['city'], voter['address']['state'], voter['address']['country'],
                  voter['address']['postcode'], voter['email'], voter['phone_number'],
@@ -58,7 +60,7 @@ def insert_voters(conn, cur, voter):
     conn.commit()
 
 def insert_candidates(conn, cur, candidate):
-    c.execute("""
+    cur.execute("""
                 INSERT INTO candidates (candidate_id, candidate_name, party_affiliation, biography, campaign_platform, photo_url)
                 VALUES (%s, %s, %s, %s, %s, %s)
             """, (

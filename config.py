@@ -1,6 +1,6 @@
 
 # user generate
-RẠNDOMUSER_URL = 'https://randomuser.me/api/?nat=gb'
+RẠNDOMUSER_URL = 'https://randomuser.me/api/?nat=US'
 
 
 POSTGRES_CONFIG = {
@@ -14,7 +14,7 @@ POSTGRES_CONFIG = {
 
 KAFKA_CONFIG = {
     "topic_voters": "topic_voters",
-    "topic_votes": "topic_voters",
+    "topic_votes": "topic_votes",
     'broker_address': 'localhost:9092'
 }
 

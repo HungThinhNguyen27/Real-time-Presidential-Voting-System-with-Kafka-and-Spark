@@ -30,7 +30,7 @@ if __name__ == "__main__":
     else:
         print(candidates)
 
-    consumer.subscribe(KAFKA_CONFIG["topic_voters"]) # topic_voters in kafka
+    consumer.subscribe(['topic_voters']) # topic_voters in kafka
     try:
         while True:
             msg = consumer.poll(timeout=1.0)
@@ -65,7 +65,5 @@ if __name__ == "__main__":
                     # conn.rollback()
                     continue
             time.sleep(0.2)
-
-
     except KafkaException as e:
         print(e)

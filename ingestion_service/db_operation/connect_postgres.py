@@ -11,7 +11,7 @@ connect = psycopg2.connect(
     host=POSTGRES_CONFIG["host"],
     dbname=POSTGRES_CONFIG["dbname"],
     user=POSTGRES_CONFIG["user"],
-    password=POSTGRES_CONFIG["password"]
+    password=POSTGRES_CONFIG["password"]    
 )
 cursor = connect.cursor()
 
@@ -32,3 +32,4 @@ def get_candidates_json():
     """)
     candidates = cursor.fetchall()
     return candidates
+

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  python-app:
+    build: .
+    container_name: data_ingestion-voting_service
+    volumes:
+      - .:/app  
+    restart: unless-stopped  
+    networks:
+      - voting-platform-nw
+    
+networks:
+  voting-platform-nw:
+    external: true
+
+# docker-compose -f docker-compose.ingestion.voting.yaml up --build
+# docker-compose -f docker-compose.ingestion.voting.yaml down

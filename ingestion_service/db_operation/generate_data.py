@@ -4,29 +4,11 @@ import sys
 import os
 import uuid
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 from config import RẠNDOMUSER_URL
 
 PARTIES = ["Republican", "Democratic"]
 random.seed(42)
-
-trump_data = {
-    "login": {"uuid": uuid.uuid4()},
-    "name": {"first": "Donald", "last": "Trump"},
-    "party_affiliation": PARTIES[0],
-    "picture": {"large": "https://upload.wikimedia.org/wikipedia/commons/5/56/Donald_Trump_official_portrait.jpg"},
-    "biography": "Donald Trump served as the 45th President of the United States.",
-    "campaign_platform": "Make America Great Again."
-}
-
-harris_data = {
-    "login": {"uuid": uuid.uuid4()},
-    "name": {"first": "Kamala", "last": "Harris"},
-    "party_affiliation": PARTIES[1],
-    "picture": {"large": "https://www.whitehouse.gov/wp-content/uploads/2021/04/V20210305LJ-0043-cropped.jpg"},
-    "biography": "Kamala Harris is the Vice President of the United States and the first female VP.",
-    "campaign_platform": "Building a better future for all Americans."
-}
 
 def generate_voter_data():
     response = requests.get(RẠNDOMUSER_URL)
@@ -56,8 +38,25 @@ def generate_voter_data():
     else:
         return "Error fetching data"
 
+trump_data = {
+    "login": {"uuid": uuid.uuid4()},
+    "name": {"first": "Donald", "last": "Trump"},
+    "party_affiliation": PARTIES[0],
+    "picture": {"large": "https://upload.wikimedia.org/wikipedia/commons/5/56/Donald_Trump_official_portrait.jpg"},
+    "biography": "Donald Trump served as the 45th President of the United States.",
+    "campaign_platform": "Make America Great Again."
+}
 
-def create_candidate_data(user_data):
+harris_data = {
+    "login": {"uuid": uuid.uuid4()},
+    "name": {"first": "Kamala", "last": "Harris"},
+    "party_affiliation": PARTIES[1],
+    "picture": {"large": "https://www.whitehouse.gov/wp-content/uploads/2021/04/V20210305LJ-0043-cropped.jpg"},
+    "biography": "Kamala Harris is the Vice President of the United States and the first female VP.",
+    "campaign_platform": "Building a better future for all Americans."
+}
+
+def candidates_format(user_data):
     return {
         "candidate_id": str(user_data['login']['uuid']),
         "candidate_name": f"{user_data['name']['first']} {user_data['name']['last']}",
@@ -66,6 +65,27 @@ def create_candidate_data(user_data):
         "campaign_platform": user_data.get('campaign_platform', "Key campaign promises or platform."),
         "photo_url": user_data['picture']['large']
     }
+
+def add_candidates(*candidate_data):
+    """
+    Adds candidates to the given list.
+    
+    Args:
+        candidate_list (list): The list to which candidate data will be added.
+        *candidate_data (dict): One or more candidate dictionaries to process.
+    """
+    candidate_list = []
+    for data in candidate_data:
+        candidate_list.append(candidates_format(data))
+    return candidate_list
+
+candidate_list = add_candidates(trump_data, harris_data)
+
+# Print the list of candidates
+for candidate in candidate_list:
+    print(candidate)
+
+
 
 
     

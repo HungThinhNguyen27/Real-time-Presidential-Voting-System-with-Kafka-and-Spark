@@ -43,26 +43,3 @@ If you need to modify Zookeeper configurations or change the exposed port, you c
 pip install -r requirements.txt
 ```
 
-2. Creating the required tables on Postgres and generating voter information on Kafka topic:
-
-```bash
-python main.py
-```
-
-3. Consuming the voter information from Kafka topic, generating voting data and producing data to Kafka topic:
-
-```bash
-python voting.py
-```
-
-4. Consuming the voting data from Kafka topic, enriching the data from Postgres and producing data to specific topics on Kafka:
-
-```bash
-python spark-streaming.py
-```
-
-5. Running the Streamlit app:
-
-```bash
-streamlit run streamlit-app.py
-```

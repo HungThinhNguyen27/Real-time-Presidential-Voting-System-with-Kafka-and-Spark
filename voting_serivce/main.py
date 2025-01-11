@@ -1,27 +1,15 @@
 import random
 import time
-from datetime import datetime
-import psycopg2
 import simplejson as json
-from confluent_kafka import Consumer, KafkaException, KafkaError, SerializingProducer
-from main import delivery_report
-from config import KAFKA_CONFIG, kafka_producer_config
-from data_src.connect_postgres import connect, cursor, get_candidates_json
-from data_src.create_tables import insert_votes
-
-
-consumer = Consumer(kafka_producer_config | {
-    'group.id': 'voting-group',
-    'auto.offset.reset': 'earliest',
-    'enable.auto.commit': False
-})
-
-producer = SerializingProducer(kafka_producer_config)
+from datetime import datetime
+from confluent_kafka import KafkaException, KafkaError
+from config import KAFKA_CONFIG
+from kafka_conn import consumer, kafka_producer
+from db_operation.conn_db import insert_votes, get_candidates_json, connect, cursor
 
 
 
 if __name__ == "__main__":
-
 
     candidates = get_candidates_json()
     candidates = [candidate[0] for candidate in candidates]
@@ -52,14 +40,8 @@ if __name__ == "__main__":
                 try:
                     print("User {} is voting for candidate: {}".format(vote['voter_id'], vote['candidate_id']))
                     insert_votes(connect, cursor, vote)
+                    kafka_producer(KAFKA_CONFIG["topic"], vote)
 
-                    producer.produce(
-                        KAFKA_CONFIG["topic_votes"],
-                        key=vote["voter_id"],
-                        value=json.dumps(vote),
-                        on_delivery=delivery_report
-                    )
-                    producer.poll(0)
                 except Exception as e:
                     print("Error: {}".format(e))
                     # conn.rollback()

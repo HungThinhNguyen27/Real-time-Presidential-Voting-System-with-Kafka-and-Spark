@@ -1,10 +1,9 @@
 
 # user generate
-RẠNDOMUSER_URL = 'https://randomuser.me/api/?nat=US'
 
 
 POSTGRES_CONFIG = {
-    "host": "localhost",
+    "host": "postgres", # container name of postgres_services on docker ! 
     "dbname": "voting",
     "user": "postgres",
     "password": "postgres"
@@ -12,10 +11,10 @@ POSTGRES_CONFIG = {
 
 # KAFKA CONFIG
 
+
 KAFKA_CONFIG = {
-    "topic_voters": "topic_voters",
-    "topic_votes": "topic_votes",
-    'broker_address': 'localhost:9092'
+    'topic': 'topic_votes',
+    'broker_address': 'broker:29092' # kafka service on docker 
 }
 
 kafka_producer_config = {'bootstrap.servers': KAFKA_CONFIG["broker_address"]}

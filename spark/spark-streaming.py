@@ -1,9 +1,11 @@
+import sys
+import os
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col
 from pyspark.sql.functions import sum as _sum
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType
-
-# import pyspark
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from config import RẠNDOMUSER_URL, KAFKA_CONFIG
 
 # print(pyspark.__version__) # to check the version of pyspark
 
@@ -51,8 +53,8 @@ if __name__ == "__main__":
     # Read data from Kafka 'votes_topic' and process it
     votes_df = spark.readStream \
         .format("kafka") \
-        .option("kafka.bootstrap.servers", "localhost:9092") \
-        .option("subscribe", "votes_topic") \
+        .option("kafka.bootstrap.servers",KAFKA_CONFIG['broker_address']) \
+        .option("subscribe", KAFKA_CONFIG['topic_votes']) \
         .option("startingOffsets", "earliest") \
         .load() \
         .selectExpr("CAST(value AS STRING)") \
@@ -73,7 +75,7 @@ if __name__ == "__main__":
     votes_per_candidate_to_kafka = votes_per_candidate.selectExpr("to_json(struct(*)) AS value") \
         .writeStream \
         .format("kafka") \
-        .option("kafka.bootstrap.servers", "localhost:9092") \
+        .option("kafka.bootstrap.servers", KAFKA_CONFIG['broker_address']) \
         .option("topic", "aggregated_votes_per_candidate") \
         .option("checkpointLocation", "/Users/macos/Downloads/WORKSPACE/data-engineer-project/realtime-voting-system/checkpoints/checkpoints1") \
         .outputMode("update") \
@@ -82,7 +84,7 @@ if __name__ == "__main__":
     turnout_by_location_to_kafka = turnout_by_location.selectExpr("to_json(struct(*)) AS value") \
         .writeStream \
         .format("kafka") \
-        .option("kafka.bootstrap.servers", "localhost:9092") \
+        .option("kafka.bootstrap.servers", KAFKA_CONFIG['broker_address']) \
         .option("topic", "aggregated_turnout_by_location") \
         .option("checkpointLocation", "/Users/macos/Downloads/WORKSPACE/data-engineer-project/realtime-voting-system/checkpoints/checkpoints2") \
         .outputMode("update") \

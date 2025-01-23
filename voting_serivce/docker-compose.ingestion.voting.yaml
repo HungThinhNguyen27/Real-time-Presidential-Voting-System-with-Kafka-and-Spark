@@ -14,5 +14,5 @@ networks:
   voting-platform-nw:
     external: true
 
-# docker-compose -f docker-compose.ingestion.voting.yaml up --build
+# docker-compose -f docker-compose.ingestion.voting.yaml up --build -d
 # docker-compose -f docker-compose.ingestion.voting.yaml down

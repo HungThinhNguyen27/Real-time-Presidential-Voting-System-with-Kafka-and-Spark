@@ -17,3 +17,13 @@ postgres_service/.postgres_service
 ingestion_service/__pycache__
 ingestion_service/env
 ingestion_service/db_operation/__pycache__
+
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/main.tfplan
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfvars
+terraform/terraform.tfvars
+
+spark_service/jobs/__pycache__

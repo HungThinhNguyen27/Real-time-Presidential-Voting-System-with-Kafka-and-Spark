@@ -27,3 +27,5 @@ terraform/terraform.tfvars
 terraform/terraform.tfvars
 
 spark_service/jobs/__pycache__
+ingestion_service/config.py
+spark_service/jobs/config.py

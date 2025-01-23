@@ -8,13 +8,17 @@ from pyspark.sql.types import (
     IntegerType,
     TimestampType,
 )
+from dotenv import load_dotenv
+import os
 
-# Lấy giá trị từ biến DATALAKE_CONFIG
-storage_account_name = DATALAKE_CONFIG["storage_account_name"]
-storage_account_key = DATALAKE_CONFIG["storage_account_key"]
-client_id = DATALAKE_CONFIG["client_id"]
-client_secret = DATALAKE_CONFIG["client_secret"]
-tenant_id = DATALAKE_CONFIG["tenant_id"]
+load_dotenv()
+
+AZURE_STORAGE_ACCOUNT_NAME = os.getenv("AZURE_STORAGE_ACCOUNT_NAME")
+AZURE_STORAGE_ACCOUNT_KEY = os.getenv("AZURE_STORAGE_ACCOUNT_KEY")
+AZURE_CLIENT_ID = os.getenv("AZURE_CLIENT_ID")
+AZURE_CLIENT_SECRET_KEY = os.getenv("AZURE_CLIENT_SECRET_KEY")
+AZURE_TENANT_ID = os.getenv("AZURE_TENANT_ID")
+
 
 votesSchema = StructType(
     [
@@ -68,24 +72,24 @@ def main():
             "spark.hadoop.fs.azure", "org.apache.hadoop.fs.azure.NativeAzureFileSystem"
         )
         .config(
-            f"spark.hadoop.fs.azure.account.key.{storage_account_name}.dfs.core.windows.net",
-            storage_account_key,
+            f"spark.hadoop.fs.azure.account.key.{AZURE_STORAGE_ACCOUNT_NAME}.dfs.core.windows.net",
+            AZURE_STORAGE_ACCOUNT_KEY,
         )
         .config(
-            f"spark.hadoop.fs.azure.account.oauth.provider.type.{storage_account_name}.dfs.core.windows.net",
+            f"spark.hadoop.fs.azure.account.oauth.provider.type.{AZURE_STORAGE_ACCOUNT_NAME}.dfs.core.windows.net",
             "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
         )
         .config(
-            f"spark.hadoop.fs.azure.account.oauth2.client.id.{storage_account_name}.dfs.core.windows.net",
-            client_id,
+            f"spark.hadoop.fs.azure.account.oauth2.client.id.{AZURE_STORAGE_ACCOUNT_NAME}.dfs.core.windows.net",
+            AZURE_CLIENT_ID,
         )
         .config(
-            f"spark.hadoop.fs.azure.account.oauth2.client.secret.{storage_account_name}.dfs.core.windows.net",
-            client_secret,
+            f"spark.hadoop.fs.azure.account.oauth2.client.secret.{AZURE_STORAGE_ACCOUNT_NAME}.dfs.core.windows.net",
+            AZURE_CLIENT_SECRET_KEY,
         )
         .config(
-            f"spark.hadoop.fs.azure.account.oauth2.client.endpoint.{storage_account_name}.dfs.core.windows.net",
-            f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token",
+            f"spark.hadoop.fs.azure.account.oauth2.client.endpoint.{AZURE_STORAGE_ACCOUNT_NAME}.dfs.core.windows.net",
+            f"https://login.microsoftonline.com/{AZURE_TENANT_ID}/oauth2/v2.0/token",
         )
         .config(
             "spark.hadoop.fs.azure.createRemoteFileSystemDuringInitialization", "true"

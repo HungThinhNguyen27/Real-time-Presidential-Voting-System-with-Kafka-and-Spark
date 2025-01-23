@@ -28,6 +28,4 @@ terraform/terraform.tfvars
 
 spark_service/jobs/__pycache__
 ingestion_service/config.py
-spark_service/jobs/config.py
-
-# git rebase -i HEAD~1f0324d5  # Thay n bằng số commit cần chỉnh sửa
+spark_service/.env
